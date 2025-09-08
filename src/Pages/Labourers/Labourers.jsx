@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 import labourersData from './data';
+import { wagesData } from '../WagesPage';
 
 
 
@@ -12,6 +13,12 @@ const Labourers = () => {
   const [messages, setMessages] = useState({}); // { [labourerId]: [msg1, msg2, ...] }
   const [messageInputs, setMessageInputs] = useState({}); // { [labourerId]: "text" }
   const itemsPerPage = 10;
+
+  // Merge wage status for demo (real app: fetch from backend)
+  const getWageStatus = (id) => {
+    const wage = wagesData.find(w => w.id === id);
+    return wage ? wage.status : "Unknown";
+  };
 
   // Filter by search
   const filteredLabourers = searchId
@@ -67,59 +74,40 @@ const Labourers = () => {
           className="px-4 py-2 border border-gray-300 rounded w-64 focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 mb-8">
         {currentLabourers.length === 0 ? (
-          <div className="col-span-4 text-center text-gray-500 text-lg">No labourer found with that ID.</div>
+          <div className="col-span-2 text-center text-gray-500 text-lg">No labourer found with that ID.</div>
         ) : (
           currentLabourers.map((labourer) => (
-            <Link
-              to={`/labourers/${labourer.id}`}
+            <div
               key={labourer.id}
-              className="bg-white rounded-lg shadow-md p-5 flex flex-col items-center border border-gray-200 hover:shadow-xl transition-shadow duration-200 cursor-pointer hover:bg-blue-50"
-              style={{ textDecoration: 'none', color: 'inherit' }}
+              className="bg-white rounded-lg shadow-md p-5 flex flex-col border border-gray-200 hover:shadow-xl transition-shadow duration-200 cursor-pointer hover:bg-blue-50"
             >
-              <img
-                src={labourer.image}
-                alt={labourer.name}
-                className="w-20 h-20 rounded-full object-cover mb-3 border-2 border-blue-300 shadow"
-                onError={(e) => { e.target.src = 'https://randomuser.me/api/portraits/lego/1.jpg'; }}
-              />
-              <div className="text-xl font-semibold text-blue-700 mb-2">{labourer.name}</div>
-              <div className="text-gray-600 mb-1">ID: <span className="font-mono">{labourer.id}</span></div>
-              <div className="text-gray-600 mb-1">Skill: <span className="font-semibold">{labourer.skill}</span></div>
-              <div className={`mb-2 px-2 py-1 rounded text-xs font-bold ${labourer.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{labourer.status}</div>
-              <div className="text-gray-600 mb-1">Age: <span className="font-semibold">{labourer.age}</span></div>
-              <div className="text-gray-600 mb-1">Experience: <span className="font-semibold">{labourer.experience} years</span></div>
-              <div className="text-gray-600 mb-1">Location: <span className="font-semibold">{labourer.location}</span></div>
-              <div className="text-gray-700 mt-2 text-center text-sm italic">{labourer.bio}</div>
-              {/* Message sending system */}
-              <div className="w-full mt-4">
-                <input
-                  type="text"
-                  value={messageInputs[labourer.id] || ""}
-                  onChange={e => handleMessageInputChange(labourer.id, e.target.value)}
-                  placeholder="Type a message..."
-                  className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400 mb-2"
-                  onClick={e => e.stopPropagation()}
+              <div className="flex gap-4 items-center mb-2">
+                <img
+                  src={labourer.image}
+                  alt={labourer.name}
+                  className="w-16 h-16 rounded-full object-cover border-2 border-blue-300 shadow"
+                  onError={(e) => { e.target.src = 'https://randomuser.me/api/portraits/lego/1.jpg'; }}
                 />
-                <button
-                  onClick={e => { e.preventDefault(); e.stopPropagation(); handleSendMessage(labourer.id); }}
-                  className="w-full px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                >
-                  Send Message
-                </button>
-                {messages[labourer.id] && messages[labourer.id].length > 0 && (
-                  <div className="mt-2 w-full">
-                    <div className="text-xs font-bold text-gray-700 mb-1">Messages sent:</div>
-                    <ul className="list-disc pl-4 text-sm text-gray-600">
-                      {messages[labourer.id].map((msg, idx) => (
-                        <li key={idx}>{msg}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                <div>
+                  <div className="text-lg font-semibold text-blue-700">{labourer.name}</div>
+                  <div className="text-gray-600">ID: <span className="font-mono">{labourer.id}</span></div>
+                  <div className="text-gray-600">Skill: <span className="font-semibold">{labourer.skill}</span></div>
+                  <div className={`mb-1 px-2 py-1 rounded text-xs font-bold ${labourer.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>{labourer.status}</div>
+                </div>
+                <div className={`ml-auto px-2 py-1 rounded text-xs font-bold ${getWageStatus(labourer.id) === 'Paid' ? 'bg-green-200 text-green-800' : getWageStatus(labourer.id) === 'Pending' ? 'bg-red-200 text-red-800' : 'bg-gray-200 text-gray-800'}`}>
+                  Wage: {getWageStatus(labourer.id)}
+                </div>
               </div>
-            </Link>
+              <div className="grid grid-cols-2 gap-2 mb-2">
+                <div className="text-gray-600">Age: <span className="font-semibold">{labourer.age}</span></div>
+                <div className="text-gray-600">Experience: <span className="font-semibold">{labourer.experience} years</span></div>
+                <div className="text-gray-600">Location: <span className="font-semibold">{labourer.location}</span></div>
+              </div>
+              <div className="text-gray-700 mb-2 text-sm italic">{labourer.bio}</div>
+              <Link to={`/labourers/${labourer.id}`} className="text-blue-500 hover:underline text-sm mb-2">View Details</Link>
+            </div>
           ))
         )}
       </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AuthProvider } from "./AuthContext.jsx";
 import AppSidebar from "./AppSidebar";
 import { Routes, Route } from "react-router-dom";
+import Home from "./Pages/Home/Home";
 import Navbar from "./Component/Navbar/Navbar";
 import Manager from "./Pages/Manager/Manager";
 import Labourers from "./Pages/Labourers/Labourers";
@@ -26,7 +27,7 @@ function App() {
       <Navbar />
       <div className="pl-0 md:pl-64 transition-all duration-300">
         <Routes>
-          <Route path="/" element={<h1>Home</h1>} />
+          <Route path="/" element={<Home />} />
           <Route path="/aboutus" element={<Aboutus />} />
           <Route path="/contactus" element={<Contactus />} />
           <Route path="/dashboard" element={<Dashboard/>} />
