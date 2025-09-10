@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
+
 function HamburgerMenu() {
   const [open, setOpen] = useState(false);
   return (
@@ -31,7 +32,9 @@ const Navbar = () => {
     <div className="select-none font-mono flex flex-row justify-between items-center p-4 bg-gray-400 text-white">
       {/*  create navbar that includes Aboutus , Contact us ,  Dashboard , Login , signup , and Labourers */}
       <section>
+        <Link to="/">
         <h1 className="text-2xl font-bold">Sahayak</h1>
+      </Link>
       </section>
 
       <section>
