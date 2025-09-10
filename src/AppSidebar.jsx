@@ -23,7 +23,7 @@ const AppSidebar = () => {
         {open ? "Close Menu" : "Open Menu"}
       </button>
       <aside
-        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-2xl z-40 transform transition-transform duration-300 ${open ? "translate-x-0" : "-translate-x-full"}`}
+        className={`fixed top-0 left-0 h-full w-64 bg-white shadow-2xl z-40 transform transition-transform duration-300 ${open ? "translate-x-0 pt-12" : "-translate-x-full pt-12"}`}
       >
         <div className="p-6 border-b">
           <h2 className="text-2xl font-bold text-blue-700 mb-4">Sahayak Menu</h2>
